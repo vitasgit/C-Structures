@@ -1,3 +1,8 @@
+/*
+заменить хвостовую на рекурсию
+заменить рекурсию по горизонатли на цикл
+*/
+
 #include <stdio.h>
 
 #define MAX 10
@@ -19,15 +24,27 @@ matrix_t a = {
     "0010000100"
 };
 
+int count = 0;
+int depth = 0;
 void fill(int x, int y)
 {
-    if ((x < MIN) || (x >= MAX) || (y < MIN) || (y >= MAX) || (a[y][x] != '0')) return;
+    count++;
+    if (depth < count) {
+        depth = count;
+    }
+
+    if ((x < MIN) || (x >= MAX) || (y < MIN) || (y >= MAX) || (a[y][x] != '0')) {
+        count--;
+        return;
+    }
 
     a[y][x] = '*';
     fill(x+1, y);
     fill(x-1, y);
     fill(x, y+1);
     fill(x, y-1);
+
+    count--;
 }
 
 void print(matrix_t s)
@@ -40,8 +57,9 @@ int main(int argc, char **argv)
     print(a);
     printf("\n");
 
-    fill(0, 0);
+    fill(4, 0);
     print(a);
+    printf("\ndepth = %d\n", depth);
 	return 0;
 
 }

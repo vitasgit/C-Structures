@@ -1,11 +1,12 @@
-import sys
+a = 7
+s = 0
+i = 1
 
-# Рекурсивная функция с выводом глубины
-def factorial(n, depth=0):
-    print(f"Depth: {depth}, n: {n}")  # Вывод текущей глубины рекурсии
-    if n == 1:
-        return 1
-    return n * factorial(n - 1, depth + 1)
+while(1):
+    if (i >= 6):
+        break 
+    
+    s = s + (a*i)
+    i += 1
 
-# Точка входа
-factorial(6)
+print(s)
