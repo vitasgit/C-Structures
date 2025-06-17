@@ -53,7 +53,13 @@ int line_find_one(const int src[], int src_size, testfunc func)
 int line_find_all(const int src[], int src_size,  testfunc func, 
 			      int result[], int result_maxsize)
 {
-
+	int count = 0;
+	for (int i = 0; i < src_size; i++) {
+		if (func(src[i]) == 1) {
+			count++;
+		}
+	}
+	return count;
 }
 
 
@@ -96,6 +102,11 @@ int bin_find_all(const int src[], int src_size, testfunc func,
 // 	for i in findLine(a,@test2) do
 // 		writeln(i);
 // проверить тесты по всем элем массива
+
+int test0(int x)
+{
+	return (x == -3);
+}
 
 int test1(int x)
 {

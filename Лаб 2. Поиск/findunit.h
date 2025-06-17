@@ -70,6 +70,7 @@ int bin_find_all(const int src[], int src_size, testfunc func,
 /*
 Тест-функции
 */
+int test0(int x);
 int test1(int x);
 int test2(int x);
 int test3(int x);
