@@ -1,5 +1,6 @@
 #include "findunit.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
  общее количество итераций поиска,
@@ -53,12 +54,23 @@ int line_find_one(const int src[], int src_size, testfunc func)
 int line_find_all(const int src[], int src_size,  testfunc func, 
 			      int result[], int result_maxsize)
 {
+	find_count = 0;
 	int count = 0;
+	int k = 0;
 	for (int i = 0; i < src_size; i++) {
+		find_count++;
+		
 		if (func(src[i]) == 1) {
 			count++;
+
+			if (k < result_maxsize) {
+				result[k] = i;
+				k++;
+			}
 		}
 	}
+	
+	printf("fc = %d\n", find_count);
 	return count;
 }
 
