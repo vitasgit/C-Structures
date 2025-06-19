@@ -59,7 +59,7 @@ int line_find_all(const int src[], int src_size,  testfunc func,
 	int k = 0;
 	for (int i = 0; i < src_size; i++) {
 		find_count++;
-		
+
 		if (func(src[i]) == 1) {
 			count++;
 
@@ -70,7 +70,7 @@ int line_find_all(const int src[], int src_size,  testfunc func,
 		}
 	}
 	
-	printf("fc = %d\n", find_count);
+	// printf("fc = %d\n", find_count);
 	return count;
 }
 
@@ -107,13 +107,6 @@ int bin_find_all(const int src[], int src_size, testfunc func,
  (0 - переданный элемент соответствует критериям поиска; 
   1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
 */
-
-// var a:TArray=(1,4,2,1,5,6,7);
-// 	i:integer;
-// BEGIN
-// 	for i in findLine(a,@test2) do
-// 		writeln(i);
-// проверить тесты по всем элем массива
 
 int test0(int x)
 {

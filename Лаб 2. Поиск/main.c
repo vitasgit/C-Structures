@@ -1,14 +1,18 @@
 #include "findunit.h"
 #include <stdio.h>
+#include <stdlib.h>
 #define N 10
 
 void printArr(const int *parr, int size);
 void printTest(const int *parr, int size, testfunc func);
+int cmp(const void *a, const void *b);
 
 
 int main()
 {
     int arr[N] = {1, 2, 3, 3, 5, 4, 7, 9, 8, 6};
+    printArr(arr, N);
+    qsort(arr, N, sizeof(int), cmp);
     printArr(arr, N);
 
     int i = line_find_one(arr, N, test2);
@@ -16,10 +20,12 @@ int main()
 
     // printTest(arr, 5, test3);
 
-    int res[6];
-    int count = line_find_all(arr, N, test3, res, 6);
-    printf("count = %d\n", count);
-    printArr(res, 6);
+    // int res[6];
+    // int count = line_find_all(arr, N, test3, res, 6);
+    // printf("count = %d\n", count);
+    // printArr(res, 6);
+
+
 
     return 0;
 }
@@ -33,6 +39,7 @@ void printArr(const int *parr, int size)
     printf("\n");
 }
 
+
 void printTest(const int *parr, int size, testfunc func)
 {
     for (int i = 0; i < size; i++) {
@@ -41,4 +48,19 @@ void printTest(const int *parr, int size, testfunc func)
         }
     }
     printf("\n");
+}
+
+
+/*
+(const int *)a - преобразовали указатель к типу const int 
+f - first
+s - second
+*/
+int cmp(const void *a, const void *b)
+{
+    const int *f = (const int *)a;
+	const int *s = (const int *)b;
+    if (*f > *s) return 1;
+	if (*f < *s) return -1;
+	return 0;
 }
