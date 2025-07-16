@@ -82,8 +82,30 @@ int line_find_all(const int src[], int src_size,  testfunc func,
  src - исходный массив
  src_size - кол-во элементов в src
  func - тест-функция
+ // 1 2 3 4 5 6 7 8 9 10
 */  
-int bin_find_one(const int src[], int src_size, testfunc func);
+int bin_find_one(const int src[], int src_size, testfunc func)
+{
+	find_count = 0;
+	int l = 0;
+	int r = src_size - 1;
+
+	while (l <= r) {
+		find_count++;
+		int m = (l + r) / 2;
+		int t = func(src[m]);
+
+		if (t == 0) {
+			//printf("fc = %d\n", find_count);
+			return m;
+		}
+		if (t < 0) l = m + 1;
+		if (t > 0) r = m - 1;
+	}
+	//printf("fc = %d\n", find_count);
+	return -1;
+}
+
 
 /*
  Бинарный поиск всех элементов в целочисленном массиве
@@ -124,6 +146,11 @@ int test2(int x)
 }
 
 int test3(int x)
+{
+	return (x - 1);  // ищем  1
+}
+
+int test4(int x)
 {
 	return (x % 2 == 0);
 }

@@ -5,17 +5,19 @@
 
 void printArr(const int *parr, int size);
 void printTest(const int *parr, int size, testfunc func);
+
+// функция сравнения для qsort
 int cmp(const void *a, const void *b);
 
 
 int main()
 {
-    int arr[N] = {1, 2, 3, 3, 5, 4, 7, 9, 8, 6};
+    int arr[N] = {1, -2, 3, 3, 5, 4, 7, 9, 8, 2};
     printArr(arr, N);
     qsort(arr, N, sizeof(int), cmp);
     printArr(arr, N);
 
-    int i = line_find_one(arr, N, test2);
+    //int i = line_find_one(arr, N, test2);
     // printf("i = %d\n", i);
 
     // printTest(arr, 5, test3);
@@ -24,6 +26,9 @@ int main()
     // int count = line_find_all(arr, N, test3, res, 6);
     // printf("count = %d\n", count);
     // printArr(res, 6);
+
+    int i = bin_find_one(arr, N, test3);
+    printf("i = %d\n", i);
 
 
 
