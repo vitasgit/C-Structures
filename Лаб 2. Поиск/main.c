@@ -12,7 +12,7 @@ int cmp(const void *a, const void *b);
 
 int main()
 {
-    int arr[N] = {1, -2, 3, 3, 5, 4, 7, 9, 8, 2};
+    int arr[N] = {1, 6, 3, 3, 5, 4, 7, 9, 8, 2};
     printArr(arr, N);
     qsort(arr, N, sizeof(int), cmp);
     printArr(arr, N);

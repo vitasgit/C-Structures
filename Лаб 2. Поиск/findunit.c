@@ -83,6 +83,8 @@ int line_find_all(const int src[], int src_size,  testfunc func,
  src_size - кол-во элементов в src
  func - тест-функция
  // 1 2 3 4 5 6 7 8 9 10
+  (0 - переданный элемент соответствует критериям поиска; 
+  1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
 */  
 int bin_find_one(const int src[], int src_size, testfunc func)
 {
@@ -99,8 +101,8 @@ int bin_find_one(const int src[], int src_size, testfunc func)
 			//printf("fc = %d\n", find_count);
 			return m;
 		}
-		if (t < 0) l = m + 1;
-		if (t > 0) r = m - 1;
+		if (t == -1) l = m + 1;
+		if (t == 1) r = m - 1;
 	}
 	//printf("fc = %d\n", find_count);
 	return -1;
@@ -147,7 +149,12 @@ int test2(int x)
 
 int test3(int x)
 {
-	return (x - 1);  // ищем  1
+	if (x == 5) 
+		return 0;
+	else if (x > 5) 
+		return 1;
+	else 
+		return -1;
 }
 
 int test4(int x)
