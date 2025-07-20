@@ -74,5 +74,6 @@ int test0(int x);
 int test1(int x);
 int test2(int x);
 int test3(int x);
+int test4(int x);
 
 #endif // FINDUNIT

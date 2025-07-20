@@ -12,7 +12,9 @@ int cmp(const void *a, const void *b);
 
 int main()
 {
-    int arr[N] = {1, 6, 3, 3, 5, 4, 7, 9, 8, 2};
+    int arr[N] = {1, 6, 3, 3, 5, 4, 5, 9, 8, 5};
+    int res_beg = -1; 
+    int res_end = -1;
     printArr(arr, N);
     qsort(arr, N, sizeof(int), cmp);
     printArr(arr, N);
@@ -27,8 +29,13 @@ int main()
     // printf("count = %d\n", count);
     // printArr(res, 6);
 
-    int i = bin_find_one(arr, N, test3);
-    printf("i = %d\n", i);
+    // int i = bin_find_one(arr, N, test3);
+    // printf("i = %d\n", i);
+
+    int count = bin_find_all(arr, N, test3, &res_beg, &res_end);
+    printf("count = %d\n", count);
+    printf("res_beg = %d\n", res_beg);
+    printf("res_end = %d\n", res_end);
 
 
 

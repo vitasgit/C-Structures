@@ -118,9 +118,48 @@ int bin_find_one(const int src[], int src_size, testfunc func)
  func - тест-функция
  res_beg - адрес переменной, куда будет сохранен индекс первого найденного элемента
  res_end - адрес переменной, куда будет сохранен индекс последнего найденного элемента
+ // сначала найти лев границу, потом правую
+  // 1 2 3 4 5 5 5 8 9 10
+  (0 - переданный элемент соответствует критериям поиска; 
+  1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
 */  
 int bin_find_all(const int src[], int src_size, testfunc func,
-			      int *res_beg, int *res_end);
+			      int *res_beg, int *res_end)
+{
+	find_count = 0;
+	int l = 0;
+	int r = src_size - 1;
+	int el_count = 0;
+
+	while (l <= r) {
+		find_count++;
+		int m = (l + r) / 2;
+		int t = func(src[m]);
+
+		if (t == 0) {
+			*res_beg = m;
+			while ((*res_beg >= 0) && (func(src[*res_beg]) == 0)) {
+				el_count++;
+				*res_beg -= 1;
+			}
+			*res_beg += 1;
+			
+			*res_end = m + 1;
+			while ((*res_end < src_size) && (func(src[*res_end]) == 0)) {
+				el_count++;
+				*res_end += 1;
+			}
+			*res_end -= 1;
+			return el_count;
+		}
+
+		if (t == -1) l = m + 1;
+		if (t == 1) r = m - 1;
+	}
+
+	//printf("fc = %d\n", find_count);
+	return el_count;
+}
 
 /*
  тест-фукнции
