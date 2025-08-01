@@ -11,8 +11,12 @@
 */
 int cmp(const void * pa, const void * pb)
 {
-	int a = *(const int *)pa;
-    int b = *(const int *)pb;
+	int a = *(const int *)pa;  // Преобразование неопределенного указателя к указателю типа int*
+    int b = *(const int *)pb; 
+
+	if (a > b) return 1;
+	else if (a < b) return -1;
+	else return 0;
 
 	return a - b;
 }
