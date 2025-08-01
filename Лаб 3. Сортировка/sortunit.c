@@ -33,5 +33,10 @@ size_t size - размер одного элемента в переданном
 void bubble_sort(void *base, size_t nmemb, size_t size, 
                 int(*compar)(const void *, const void *))
 {
-	printf("awdwad\n");
+	char *p0 = (char *)base;  // получить указатель на начало массива
+	char *end = (char *)base + nmemb * size;  // получить указатель на конец массива
+	
+	for (char *i = p0; i < end; i += size) {
+		printf("ptr = %d\n", *i);
+	}
 }
