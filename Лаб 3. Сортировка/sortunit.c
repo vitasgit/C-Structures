@@ -1,7 +1,7 @@
 #include "sortunit.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 /*
 Функция сравнения
@@ -33,10 +33,22 @@ size_t size - размер одного элемента в переданном
 void bubble_sort(void *base, size_t nmemb, size_t size, 
                 int(*compar)(const void *, const void *))
 {
-	char *p0 = (char *)base;  // получить указатель на начало массива
-	char *end = (char *)base + nmemb * size;  // получить указатель на конец массива
+	char *p0 = (char *)base;  // получить указатель на начало массива, на первый байт
+	char *tmp = malloc(size);  // указатель типа char на область памяти в size байтах (size ячеек по 1 байту(char))
 	
-	for (char *i = p0; i < end; i += size) {
-		printf("ptr = %d\n", *i);
+	for (int i = 0; i < nmemb-1; i++) {  // перебираем каждый элемент(индекс)
+		for (int j = 0; j < nmemb-1; j++) {  // сравниваем соседние элементы(индексы)
+		    
+			void *a = p0+j*size;  // адрес на первую ячейку
+			void *b = p0+(j+1)*size;  // адрес на следующую ячейку
+
+			if (cmp(a, b) > 0) {
+
+				memcpy(tmp, a, size);
+				memcpy(a, b, size);
+				memcpy(b, tmp, size);
+			}
+		}
 	}
+	free(tmp);
 }
