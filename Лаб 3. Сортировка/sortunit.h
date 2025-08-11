@@ -23,4 +23,16 @@ void bubble_sort(void *base, size_t nmemb, size_t size,
                 int(*compar)(const void *, const void *));
 
 
+/*
+Сортировка вставками базовая
+Сортирует массив base, размера nmemb элементов, при этом каждый элемент имеет размер size
+
+void *base - ссылка на начало массива
+size_t nmemb - кол-во эл в переданном массиве
+size_t size - размер одного элемента в переданном массиве
+*/
+void insert_sort(void *base, size_t nmemb, size_t size, 
+                int(*compar)(const void *, const void *));
+
+
 #endif // SORTUNIT
