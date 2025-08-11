@@ -3,6 +3,7 @@
         "sort.h": "c",
         "stdlib.h": "c",
         "sortunit.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stddef.h": "c"
     }
 }

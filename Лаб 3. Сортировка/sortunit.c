@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /*
 Функция сравнения
@@ -37,18 +38,22 @@ void bubble_sort(void *base, size_t nmemb, size_t size,
 	char *tmp = malloc(size);  // указатель типа char на область памяти в size байтах (size ячеек по 1 байту(char))
 	
 	for (int i = 0; i < nmemb-1; i++) {  // перебираем каждый элемент(индекс)
+		bool flag = 0;
+
 		for (int j = 0; j < nmemb-1; j++) {  // сравниваем соседние элементы(индексы)
 		    
 			void *a = p0+j*size;  // адрес на первую ячейку
 			void *b = p0+(j+1)*size;  // адрес на следующую ячейку
 
 			if (cmp(a, b) > 0) {
-
 				memcpy(tmp, a, size);
 				memcpy(a, b, size);
 				memcpy(b, tmp, size);
+				flag = 1;
 			}
 		}
+		if (flag == 0) {break;}
+
 	}
 	free(tmp);
 }
