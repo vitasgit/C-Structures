@@ -34,11 +34,11 @@ void disposeListL2C(pnodeL2C *ph);
 // если fwd!=0, перебор узлов осуществляется в прямом направлении, иначе - в обратном
 // если func возвращает 0, listAction завершает перебор узлов
 typedef int (*listfunc)(double);
-void listActionL2C(pnodeL2C ph, /*int fwd,*/ listfunc func);
+void listActionL2C(pnodeL2C ph, int fwd, listfunc func);
 
 // последующие функции должны использовать listActionL2C
 // выводит список в стандартный поток вывода в прямом (fwd!=0) или обратном (fwd==0) порядке
-void listOutL2C(pnodeL2C ph/*, int fwd*/);
+void listOutL2C(pnodeL2C ph, int fwd);
 // возвращает количество элементов в списке
 int listCountL2C(pnodeL2C ph);
 // возвращает минимальный (min!=0) или максимальный (min==0) элемент в списке

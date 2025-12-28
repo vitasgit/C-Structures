@@ -28,13 +28,22 @@ pnodeL2C addFirstNodeL2C(pnodeL2C *ph, pnodeL2C p)
     
 }
 
-void listActionL2C(pnodeL2C ph, /*int fwd,*/ listfunc func)
+void listActionL2C(pnodeL2C ph, int fwd, listfunc func)
 {
     pnodeL2C p = ph;
-    do {
-        if (func(p->data) == 0) return;
-        p = p->pnext;
-    } while (p != ph);
+    if (fwd != 0) {
+        do {
+            if (func(p->data) == 0) return;
+            p = p->pnext;
+        } while (p != ph);
+    }
+    else {
+        p = ph->pprev;
+        do {
+            if (func(p->data) == 0) return;
+            p = p->pprev;
+        } while (p != ph->pprev);  // чтобы выводил последний узел (голову)
+    }
 }
 
 int nodeOutL2C(double data)
@@ -44,9 +53,9 @@ int nodeOutL2C(double data)
     // реализация "молотка"
 }
 
-void listOutL2C(pnodeL2C ph/*, int fwd*/)
+void listOutL2C(pnodeL2C ph, int fwd)
 {
-    listActionL2C(ph, nodeOutL2C);
+    listActionL2C(ph, fwd, nodeOutL2C);
     // нельзя написать напрямую реализацию "молотка", так как сигнатура этого не позволяет.
 }
 
