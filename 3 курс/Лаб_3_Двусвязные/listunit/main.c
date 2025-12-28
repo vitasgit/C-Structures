@@ -17,6 +17,7 @@ int main()
     printf("\n");
     addLastNodeL2C(&phead, createNodeL2C(4.0));
     listOutL2C(phead, 1);
+    listOutDbg(phead);
 
 
 
