@@ -48,7 +48,7 @@ double minmaxL2C(pnodeL2C ph, int min);
 pnodeL2C abNodeL2C(pnodeL2C ph, int first, int above, double data);
 
 void listOutDbg(pnodeL2C ph);
-double nodeOutL2C(pnodeL2C ph);
+int nodeOutL2C(double data);
 
 
 #endif // LISTUNIT_L2C

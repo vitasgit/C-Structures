@@ -37,9 +37,9 @@ void listActionL2C(pnodeL2C ph, /*int fwd,*/ listfunc func)
     } while (p != ph);
 }
 
-double nodeOutL2C(pnodeL2C ph)
+int nodeOutL2C(double data)
 {
-    printf("%.2f\n", ph->data);
+    printf("%.2f\n", data);
     return 1;
     // реализация "молотка"
 }
