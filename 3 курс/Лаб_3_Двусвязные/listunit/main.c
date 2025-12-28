@@ -3,7 +3,7 @@
 
 int main()
 {
-    pnodeL2C phead = NULL;
+    pnodeL2C phead, t = NULL;
     phead = createNodeL2C(1.0);
     //printf("%.2f\n", phead->data);
 
@@ -23,10 +23,15 @@ int main()
     printf("\n");
     insertAfterNodeL2C(phead->pprev->pprev, createNodeL2C(1.5));
     listOutL2C(phead, 1);
+    printf("\n");
     insertBeforeNodeL2C(phead, createNodeL2C(77.0));
     listOutL2C(phead, 1);
-    // listOutDbg(phead);
+    //listOutDbg(phead);
 
+    printf("\n");
+    t = deleteNodeL2C(&phead, phead);
+    listOutL2C(phead, 1);
+    listOutDbg(phead);
 
 
     // tnodeL1 *p = phead;

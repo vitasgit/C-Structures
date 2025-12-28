@@ -14,6 +14,15 @@ pnodeL2C createNodeL2C(double data)
 
 pnodeL2C addFirstNodeL2C(pnodeL2C *ph, pnodeL2C p)
 {
+    if (p == NULL) {return NULL;}
+
+    if (*ph == NULL) {
+        *ph = p;
+        (*ph)->pnext = *(ph);
+        (*ph)->pprev = *(ph);
+        return p;
+    }
+
     p->pprev = (*ph)->pprev;
     p->pnext = (*ph);
     (*ph)->pprev->pnext = p;
@@ -24,6 +33,15 @@ pnodeL2C addFirstNodeL2C(pnodeL2C *ph, pnodeL2C p)
 
 pnodeL2C addLastNodeL2C(pnodeL2C *ph, pnodeL2C p)
 {
+    if (p == NULL) {return NULL;}
+    
+    if (*ph == NULL) {
+        *ph = p;
+        (*ph)->pnext = *(ph);
+        (*ph)->pprev = *(ph);
+        return p;
+    }
+
     p->pprev = (*ph)->pprev;  // кладем адрес на узел слева
     p->pnext = *ph;  // кладем адрес на голову
     (*ph)->pprev->pnext = p;  // кладем в предпослдений узел адрас на конец
@@ -33,6 +51,8 @@ pnodeL2C addLastNodeL2C(pnodeL2C *ph, pnodeL2C p)
 
 pnodeL2C insertAfterNodeL2C(pnodeL2C pn, pnodeL2C p)
 {
+    if (pn == NULL || p == NULL) {return NULL;}
+
     p->pprev = pn;  // кладем адрес узла слева
     p->pnext = pn->pnext; // кладем адрес узла справа
     pn->pnext->pprev = p; // кладем в узел справа адрес новый узел
@@ -40,13 +60,40 @@ pnodeL2C insertAfterNodeL2C(pnodeL2C pn, pnodeL2C p)
     return p;
 }
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!! почему если вставить узел перед головой, то он добавляется в конец, становится последним
 pnodeL2C insertBeforeNodeL2C(pnodeL2C pn, pnodeL2C p)
 {
+    if (pn == NULL || p == NULL) {return NULL;}
+
     p->pnext = pn;  // кладем адрес узла справа
     p->pprev = pn->pprev;  // кладем адрес узла слева
     pn->pprev->pnext = p;  // в левый узел кладем адрес на новый
     pn->pprev = p;  // в правй узел кладем адрес на новый
     return p;
+}
+
+pnodeL2C deleteNodeL2C(pnodeL2C *ph, pnodeL2C pn)
+{
+    if (*ph == NULL || pn == NULL) {return NULL;}
+
+    if ((*ph == pn) && (pn->pnext == *ph)) {  // когда всего один узел - голова
+        pn->pnext = NULL;
+        pn->pprev = NULL;
+        *ph = NULL;
+        return NULL;
+    }
+
+    if (pn = *ph) {  // когда pn = ph (удаляем голову)
+        //(*ph)->pnext->pprev = (*ph)->pprev;
+        *ph = (*ph)->pnext;
+    }
+    
+    pn->pprev->pnext = pn->pnext;  // кладем в узел слева адрес на правый(pnext)
+    pn->pnext->pprev = pn->pprev;  // кладем в узел справа адрес на левый(pprev)
+    pn->pprev = NULL;
+    pn->pnext = NULL;
+    return pn;
 }
 
 void listActionL2C(pnodeL2C ph, int fwd, listfunc func)
