@@ -27,7 +27,25 @@ pnodeL2C addLastNodeL2C(pnodeL2C *ph, pnodeL2C p)
     p->pprev = (*ph)->pprev;  // кладем адрес на узел слева
     p->pnext = *ph;  // кладем адрес на голову
     (*ph)->pprev->pnext = p;  // кладем в предпослдений узел адрас на конец
-    (*ph)->pprev = p;
+    (*ph)->pprev = p;  // кладем в голове адрес на новый конец
+    return p;
+}
+
+pnodeL2C insertAfterNodeL2C(pnodeL2C pn, pnodeL2C p)
+{
+    p->pprev = pn;  // кладем адрес узла слева
+    p->pnext = pn->pnext; // кладем адрес узла справа
+    pn->pnext->pprev = p; // кладем в узел справа адрес новый узел
+    pn->pnext = p;  // кладем в узел слева адрес новый узел
+    return p;
+}
+
+pnodeL2C insertBeforeNodeL2C(pnodeL2C pn, pnodeL2C p)
+{
+    p->pnext = pn;  // кладем адрес узла справа
+    p->pprev = pn->pprev;  // кладем адрес узла слева
+    pn->pprev->pnext = p;  // в левый узел кладем адрес на новый
+    pn->pprev = p;  // в правй узел кладем адрес на новый
     return p;
 }
 

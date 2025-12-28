@@ -17,7 +17,15 @@ int main()
     printf("\n");
     addLastNodeL2C(&phead, createNodeL2C(4.0));
     listOutL2C(phead, 1);
-    listOutDbg(phead);
+    printf("\n");
+    insertAfterNodeL2C(phead->pnext, createNodeL2C(2.5));
+    listOutL2C(phead, 1);
+    printf("\n");
+    insertAfterNodeL2C(phead->pprev->pprev, createNodeL2C(1.5));
+    listOutL2C(phead, 1);
+    insertBeforeNodeL2C(phead, createNodeL2C(77.0));
+    listOutL2C(phead, 1);
+    // listOutDbg(phead);
 
 
 
