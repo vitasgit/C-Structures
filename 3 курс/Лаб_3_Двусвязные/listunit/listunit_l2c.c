@@ -14,18 +14,20 @@ pnodeL2C createNodeL2C(double data)
 
 pnodeL2C addFirstNodeL2C(pnodeL2C *ph, pnodeL2C p)
 {
-    // p->pnext = (*ph)->pprev;
-    // p->pprev = (*ph)->pnext;
-    // (*ph)->pnext = p->pprev;
-    // (*ph)->pprev = p->pnext;
-    // (*ph) = p;
-
     p->pprev = (*ph)->pprev;
     p->pnext = (*ph);
     (*ph)->pprev->pnext = p;
     (*ph)->pprev = p;
     *ph = p;
-    
+    return p;
+}
+
+pnodeL2C addLastNodeL2C(pnodeL2C *ph, pnodeL2C p)
+{
+    p->pprev = (*ph)->pprev;  // кладем адрес на узел слева
+    p->pnext = *ph;  // кладем адрес на голову
+    (*ph)->pprev->pnext = p;  // кладем голове адрес на новый конечный узел
+    return p;
 }
 
 void listActionL2C(pnodeL2C ph, int fwd, listfunc func)

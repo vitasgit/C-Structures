@@ -13,7 +13,10 @@ int main()
     // printf("%.2f\n", phead->pprev->pprev->data);
     // printf("%.2f\n", phead->data);
     // listOutDbg(phead);
-    listOutL2C(phead, 0);
+    listOutL2C(phead, 1);
+    printf("\n");
+    addLastNodeL2C(&phead, createNodeL2C(4.0));
+    listOutL2C(phead, 1);
 
 
 
