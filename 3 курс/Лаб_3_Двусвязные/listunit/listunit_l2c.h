@@ -49,7 +49,20 @@ pnodeL2C abNodeL2C(pnodeL2C ph, int first, int above, double data);
 
 void listOutDbg(pnodeL2C ph);
 int nodeOutL2C(double data);
+int nodeCountL2C(double data);
 
+int nodeMinL2C(double data);
+int nodeMaxL2C(double data);
+
+int nodeBigL2C(double data);
+int nodeSmallL2C(double data);
+
+extern int countvar;
+extern double minvar;
+extern double maxvar;
+extern pnodeL2C pcurrvar;
+extern double datavar;
+//extern double bigvar;
 
 #endif // LISTUNIT_L2C
 
