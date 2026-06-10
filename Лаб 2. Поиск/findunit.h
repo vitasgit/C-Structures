@@ -6,7 +6,7 @@
  общее количество итераций поиска,
  обнуляется и заполняется каждой функцией поиска
 */  
-//int find_count;
+extern int find_count;
 
 /*
  Тип тест-функции
@@ -16,7 +16,6 @@
  (0 - переданный элемент соответствует критериям поиска; 
   1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
 */
-
  typedef int (*testfunc)(int);
 
 /*
@@ -70,10 +69,10 @@ int bin_find_all(const int src[], int src_size, testfunc func,
 /*
 Тест-функции
 */
-int test0(int x);
-int test1(int x);
-int test2(int x);
-int test3(int x);
-int test4(int x);
+// int test0(int x);
+// int test1(int x);
+// int test2(int x);
+// int test3(int x);
+// int test4(int x);
 
 #endif // FINDUNIT

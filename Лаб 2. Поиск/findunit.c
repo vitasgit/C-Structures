@@ -16,8 +16,7 @@ int find_count;
  (0 - переданный элемент соответствует критериям поиска; 
   1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
 */
-
- typedef int (*testfunc)(int);
+typedef int (*testfunc)(int);
 
 /*
  Линейный поиск одного элемента в целочисленном массиве
@@ -90,19 +89,20 @@ int bin_find_one(const int src[], int src_size, testfunc func)
 {
 	find_count = 0;
 	int l = 0;
-	int r = src_size - 1;
+	int r = src_size - 1;   // !! почему вычитаем 1. (потому что индекс с 0)
+	//printf("r = %d\n", r);
 
 	while (l <= r) {
 		find_count++;
 		int m = (l + r) / 2;
-		int t = func(src[m]);
+		int t = func(src[m]); 
 
 		if (t == 0) {
 			//printf("fc = %d\n", find_count);
 			return m;
 		}
-		if (t == -1) l = m + 1;
-		if (t == 1) r = m - 1;
+		if (t == -1) r = m - 1;
+		if (t == 1) l = m + 1;
 	}
 	//printf("fc = %d\n", find_count);
 	return -1;
@@ -153,44 +153,37 @@ int bin_find_all(const int src[], int src_size, testfunc func,
 			return el_count;
 		}
 
-		if (t == -1) l = m + 1;
-		if (t == 1) r = m - 1;
+		if (t == -1) r = m - 1;
+		if (t == 1) l = m + 1;
 	}
 
 	//printf("fc = %d\n", find_count);
 	return el_count;
 }
 
+
+//Мои тест-фукнции
 /*
- тест-фукнции
- Для линейного поиска должна возвращать 0 или 1
- (0 - переданный элемент НЕ соответствует критериям поиска, 1 - соответствует)
-
- Для бинарного поиска должна возвращать 0, 1 или -1
- (0 - переданный элемент соответствует критериям поиска; 
-  1,-1 - больше/меньше искомого элемента или наоборот в зависимости от решения программиста)
-*/
-
 int test0(int x)
 {
-	return (x == -3);
+	return (x == arrvar[]);  // последний элемент
 }
 
 int test1(int x)
 {
-	return (x == 3);
+	return (x == 5);  // первый элемент
 }
 
 int test2(int x)
 {
-	return (x > 3);
+	return (x > 3);  // середина
 }
 
 int test3(int x)
 {
-	if (x == 5) 
+	if (x == 4) 
 		return 0;
-	else if (x > 5) 
+	else if (x > 4) 
 		return 1;
 	else 
 		return -1;
@@ -200,3 +193,4 @@ int test4(int x)
 {
 	return (x % 2 == 0);
 }
+*/
