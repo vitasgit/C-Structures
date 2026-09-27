@@ -1,0 +1,121 @@
+1) универсальная функция для сортировки
+2) создать отдельно модуль для тестов testunit
+3) учесть что массив может быть из одного элемента. тогда просто вернуть этот же массив. (из лекций)
+4) добавить переменную счетчик, чтобы наглядно было видна разница между простыми вставками и вставками+бинпоиск
+
+---
+# На чем остановился:
+~~Нужно проверить void sort_vbin в debug~~
+
+
+---
+
+Сортировка вставками (базовая)
+7 1 3 9 5 3
+
+i = 1
+j = 7
+
+for i=1 to n-1:
+    j = i-1
+    t = a[i]
+    while j >= 0 and a[j] > t  // j >= 0 - не выйти за левый предел массива; a[j] > a[j+1] - левый больше правого, нужно менять
+        a[j+1] = a[j]]
+        j -= 1
+    a[j+1] = t
+
+
+---
+https://stepik.org/lesson/284061/step/3?unit=265369
+При написании функции типа compare() заметим, что она должна возвращать целое число. Значит это нужно учитывать при реализации это й функции для элементов типа float
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int cmpFloat(const void* pa, const void * pb)
+{
+    float a = *((float*)pa);
+    float b = *((float*)pb);
+    return (a > b) - (a < b);
+    // сравнивать вещ числа напрямую нельзя.
+    // в qsort 0 - значит числа равны (правирить в доке)
+}
+
+
+
+
+-------
+
+При сортировке строк нужно учитывать, что начало строки - это тоже указатель на char.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// Выделение памяти под массив указателей на строки,
+// выделение памяти для каждой строки и заполнение значениями
+char ** getStrings(int * n)
+{
+    scanf("%d", n);
+    char buf[100];
+    char **tmp = calloc(*n, sizeof(char*));
+    for( int i = 0; i < *n; i++)
+    {
+        scanf("%s", buf);
+        int len  = strlen(buf);
+        tmp[i] = calloc(len + 1, sizeof(char));
+        strcpy(tmp[i], buf);
+    }
+    return tmp;
+}
+// Строки будут сравниваться лексикографически
+int cmpStr(const void* pa, const void * pb)
+{
+// Преобразуем неопределенный указатель  к (char**) и
+// Этот указатель - адрес одной строки из массива
+// поэтому ((char **) pa)[0] и *(char **) pb - начало строки
+    return strcmp(((char **) pa)[0], *(char **) pb);
+}
+void prStr(char ** a, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        printf("%s\n", a[i]);
+    }
+}
+
+void  destroyStrAr(char ** a, int n)
+{
+    if ( a != 0)
+        for(int i = 0; i < n; i++)
+            free(a[i]);
+    free(a);
+}
+int main(){
+    char ** a = 0;
+    int n;
+    a = getStrings(&n);
+    printf("Изначальный массив\n");
+    prStr(a, n);
+// В массиве a - УКАЗАТЕЛИ на char (начло строк)
+    qsort(a, n, sizeof(char*), cmpStr);
+    printf("Сортировка\n");
+    prStr(a, n);
+    destroyStrAr(a, n);
+    return 0;
+}
+
+
+./sortString<str.dat
+Изначальный массив
+abc
+ABdre
+Vfre
+Poilin
+123A
+Сортировка
+123A
+ABdre
+Poilin
+Vfre
+abc
+>
