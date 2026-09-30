@@ -11,6 +11,8 @@
 Должна возвращать целое число меньше, больше нуля или равное ему, если первый аргумент, соответственно, меньше, больше второго или равен ему. Если два члена массива равны, то порядок их расположения в массиве не определен.  
 
 *(const int *)pa  // сначала преобразовали указатель из типа void в тип const int, затем разыменовали и записали значение в переменную int a
+
+// зачем const
 */
 int cmp(const void *pa, const void *pb)
 {
@@ -36,7 +38,7 @@ int cmp(const void *pa, const void *pb)
 */
 int swap(void *p1, void *p2, size_t size)
 {
-	char *tmp = malloc(size);           // или лучше использовать void *tmp. какое преимущество дает char?
+	char *tmp = malloc(size);
 	memcpy(tmp, p1, size);
 	memcpy(p1, p2, size);
 	memcpy(p2, tmp, size);
@@ -113,7 +115,7 @@ void sort_v(void *base, size_t nmemb, size_t size,
 void sort_vbin(void *base, size_t nmemb, size_t size, 
                 int(*compar)(const void *, const void *))
 {
-	char *tmp = malloc(size);  // или лучше использовать void *tmp. какое преимущество дает char?
+	char *tmp = malloc(size);
 	// free !!!!!
 	for (int i = 1; i < nmemb; i++) {    //  int или size_t для i
 		int l = 0;
@@ -148,74 +150,74 @@ void sort_vbin(void *base, size_t nmemb, size_t size,
 	free(tmp);
 }
 
-// Быстрая сортировка
-void sort_q(void *base, size_t nmemb, size_t size, 
-                int(*compar)(const void *, const void *))
-{
-	int l = 0;  // начало индека
-	int r = nmemb-1;  // последний индекс
-	int c = (l+r)/2;
-	if (l>r) {return;}  // базовый случай
-
-	char *p0 = (char*)base;  // указатель на начало памяти
-	char *pl = (char*)base;  // указатель на начало памяти
-	char *pr = (char*)base + r*size;  // указатель на полследнию ячейку памяти
-	char *pc = (char*)base + c*size;
-
-	/* первый вариант через индексы (не высчитываю pl, pr)
-	while (l <= r) {
-		while (cmp(pl, pc) < 0) {l++; pl = (char*)base + l*size;}  // увеличиваем левую границу на 1 ячейку
-		while (cmp(pr, pc) > 0) {r--;}  // увеличиваем правую границу на 1 ячейку
-		if (l <= r) {
-			swap(pl, pr, size);
-			l++; r--;
-		}
-	}
-	*/
-
-
-	while (pl <= pr) {
-		while (cmp(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
-		while (cmp(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
-		if (pl <= pr) {
-			swap(pl, pr, size);
-			pl += size;
-			pr -= size;
-		}
-	}
-
-	sort_q((char*)base,l+1,size,cmp);
-	sort_q((char*)base+r*size,nmemb-r,size,cmp);
-
-}
-
 
 void sort_q(void *base, size_t nmemb, size_t size, 
                 int(*compar)(const void *, const void *))
 {
-
-	// if (nmemb < 2) return;  защита от переполнения пока не задумываемся
-	// if () {return;}  // базовый случай
+	if (nmemb < 2) return;  // базовый случай
 
 	char *pl = (char*)base;  // указатель на начало памяти
 	char *pr = (char*)base + (nmemb-1)*size;  // указатель на полследнию ячейку памяти
 	char *pc = (char*)base + (nmemb/2)*size;
+	char *tc = malloc(size);
+	//*tc = *pc;  // баг, копирую только 1 байт (char)
+	memcpy(tc, pc, size);  // защита от перезаписи
 
 	while (pl <= pr) {
-		while (cmp(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
-		while (cmp(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
+		while (cmp(pl, tc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
+		while (cmp(pr, tc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
 		if (pl <= pr) {
 			swap(pl, pr, size);  // риск замены pc
 			pl += size;
 			pr -= size;
 		}
 	}
+	free(tc);
 
-	// int k1 = (pl-(char*)base) / size;  // можно ли так?
-	// int k2 = ((char*)base-pr) / size;
-	int k1 = (pr - (char*)base)/size+1;  // зачем +1?
-	int k2 = nmemb - (pl - (char*)base)/size;
-	sort_q((char*)base, k1, size, cmp);
-	sort_q(pl, k2, size, cmp);
+	int k1 = (pr - (char*)base)/size+1;
+	int k2 = nmemb - (pl - (char*)base)/size;  // разобрать, упростить потом
+	sort_q((char*)base, k1, size, cmp);  // левый
+	sort_q(pl, k2, size, cmp);  // правый
 
 }
+
+
+// Быстрая сортировка
+// void sort_q(void *base, size_t nmemb, size_t size, 
+//                 int(*compar)(const void *, const void *))
+// {
+// 	int l = 0;  // начало индека
+// 	int r = nmemb-1;  // последний индекс
+// 	int c = (l+r)/2;
+// 	if (l>r) {return;}  // базовый случай
+
+// 	char *p0 = (char*)base;  // указатель на начало памяти
+// 	char *pl = (char*)base;  // указатель на начало памяти
+// 	char *pr = (char*)base + r*size;  // указатель на полследнию ячейку памяти
+// 	char *pc = (char*)base + c*size;
+
+// 	/* первый вариант через индексы (не высчитываю pl, pr)
+// 	while (l <= r) {
+// 		while (cmp(pl, pc) < 0) {l++; pl = (char*)base + l*size;}  // увеличиваем левую границу на 1 ячейку
+// 		while (cmp(pr, pc) > 0) {r--;}  // увеличиваем правую границу на 1 ячейку
+// 		if (l <= r) {
+// 			swap(pl, pr, size);
+// 			l++; r--;
+// 		}
+// 	}
+// 	*/
+
+
+// 	while (pl <= pr) {
+// 		while (cmp(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
+// 		while (cmp(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
+// 		if (pl <= pr) {
+// 			swap(pl, pr, size);
+// 			pl += size;
+// 			pr -= size;
+// 		}
+// 	}
+
+// 	sort_q((char*)base,l+1,size,cmp);
+// 	sort_q((char*)base+r*size,nmemb-r,size,cmp);
+// }

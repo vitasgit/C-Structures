@@ -56,57 +56,45 @@ void outArr(const int *parr, int size)
     printf("\n");
 }
 
-// Сортировка вставками с бинарным поиском
-// i - эл для которого ищем место для вставки
-// char *el - элемент которому нужно найти место, он правее границы на 1. Указатель на i
-// k - 
-void sort_vbin(void *base, size_t nmemb, size_t size, 
+void sort_q(void *base, size_t nmemb, size_t size, 
                 int(*compar)(const void *, const void *))
 {
-	char *tmp = malloc(size);  // или лучше использовать void *tmp. какое преимущество дает char?
-	// free !!!!!
-	for (int i = 1; i < nmemb; i++) {    //  int или size_t для i
-		int l = 0;
-		int r = i-1;   // границы по отсортированной области, а не всему массиву
-		//int k = i;
+	if (nmemb < 2) return;  // базовый случай
 
-		char *pi = (char*)base + i*size;  // элемент которому нужно найти место, он правее границы на 1
-		while (l <= r) {
-			int mi = (l + r)/2;  // серединный индекс
-			char *pmi = (char*)base + mi*size;
+	char *pl = (char*)base;  // указатель на начало памяти
+	char *pr = (char*)base + (nmemb-1)*size;  // указатель на полследнию ячейку памяти
+	char *pc = (char*)base + (nmemb/2)*size;
+	char *tc = malloc(size);
+	//*tc = *pc;  // баг, копирую только 1 байт (char)
+	memcpy(tc, pc, size);  // защита от перезаписи
 
-			if (compar(pmi, pi) > 0) {  // если pmi > pi, то сдвигаем правую границу, идем налево 
-				r = mi-1;  // сдвигаю правую границу. так как я сделал в cmp строго больше, то нет смысла в r присваивать середину, он точно не подходит, поэтому сдвигаю границу ещё на 1 влево.
-			}
-			else {
-				l = mi+1;
-			}
-			// if (cmp(pmi, pi) == -1) {
-			// 	l = mi+1;
-			// }
+	while (pl <= pr) {
+		while (cmp(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
+		while (cmp(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
+		if (pl <= pr) {
+			swap(pl, pr, size);  // риск замены pc
+			pl += size;
+			pr -= size;
 		}
-		memcpy(tmp, pi, size);
-		
-		// dst, src, n
-		// l+1 --> (char*)base + (l+1)*size   	правее на 1 от границы l
-		// l --> (char*)base + l*size 			указатель на саму границу l
-		// (i-l)*size   						кол-во байт, которые нужно передвинуть.
-		memmove((char*)base + (l+1)*size, (char*)base + l*size, (i-l)*size );
-		memcpy((char*)base + l*size, tmp, size);
-
 	}
-	free(tmp);
+	free(tc);
+
+	int k1 = (pr - (char*)base)/size+1;
+	int k2 = nmemb - (pl - (char*)base)/size;  // разобрать, упростить потом
+	sort_q((char*)base, k1, size, cmp);  // левый
+	sort_q(pl, k2, size, cmp);  // правый
+
 }
 
 
 int main()
 {
     int arr[N] = {3, 2, 1};
-    outArr(arr, N);
+    int arr2[9] = {8, 9, 7, 1, 2, 3, 4, 5, 6};
+	outArr(arr2, 9);
 
-    // Вставками базовая
-    sort_vbin(arr, N, sizeof(arr[0]), cmp);
-    outArr(arr, N);
+    sort_q(arr2, 9, sizeof(arr2[0]), cmp);
+    outArr(arr2, 9);
 
 
 
