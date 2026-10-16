@@ -4,10 +4,18 @@
 #define N 100
 
 // n - кол-во элементов
-void outArr(const int *parr, int n)
+void outArrInt(int *parr, int n)
 {
 	for (int i = 0; i < n; i++) {
 		printf("%d ", parr[i]);
+	}
+    printf("\n");
+}
+
+void outArrFloat(float *parr, int n)
+{
+    for (int i = 0; i < n; i++) {
+		printf("%.2f ", parr[i]);
 	}
     printf("\n");
 }
@@ -64,10 +72,34 @@ void *arrGenInt(int n)
     return parr;
 }
 
-int isSorted(int *parr, int n)
+void *arrGenFloat(int n)
 {
-    for (int i=0; i<n-1; i++) {
-        if (parr[i] > parr[i+1]) return 0;
+    float *parr = malloc(sizeof(float)*n);  // в куче
+    for (int i=0; i < n; i++) {
+        parr[i] = (float)rand() / (float)RAND_MAX * n;  // разобрать потом
+    }
+
+    return parr;
+}
+
+// int isSortedInt(int *parr, int n)
+// {
+//     for (int i=0; i<n-1; i++) {
+//         if (parr[i] > parr[i+1]) return 0;
+//     }
+//     return 1;
+// }
+
+int isSorted(void *base, size_t nmemb, size_t size, 
+                int(*compar)(const void *, const void *))
+{
+    if (nmemb < 2) return 1; // на пустой
+    char *pprev = (char*)base;
+    char *pnext = (char*)base + size;
+
+    for (int i=0; i<nmemb-2; i++) {
+        if (compar(pprev, pnext) > 0) return 0;
+        pprev+= size; pnext+= size;
     }
     return 1;
 }
@@ -76,14 +108,14 @@ int isSorted(int *parr, int n)
 
 int main()
 {
-    int *parr = arrGenInt(N);
+    float *parr = arrGenFloat(N);
 
-    outArr(parr, N);
-    printf("isSorted=%d\n", isSorted(parr, N));
+    outArrFloat(parr, N);
+    printf("isSorted=%d\n", isSorted(parr, N, sizeof(parr[0]), cmpFloat));
 
-    sort_bubble(parr, N, sizeof(parr[0]), cmpInt);
-    outArr(parr, N);
-    printf("isSorted=%d\n", isSorted(parr, N));
+    sort_bubble(parr, N, sizeof(parr[0]), cmpFloat);
+    outArrFloat(parr, N);
+    printf("isSorted=%d\n", isSorted(parr, N, sizeof(parr[0]), cmpFloat));
 
     
     free(parr);
