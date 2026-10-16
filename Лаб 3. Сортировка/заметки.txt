@@ -1,3 +1,9 @@
+# disassembly
+https://godbolt.org/
+
+# про адресную арифметику
+https://www.youtube.com/watch?v=vCl9JDtazkI
+
 
 # про копирования элемента
 if (cmp(pmi, pi) == 0) {  // если равны, то я нашел место для вставки

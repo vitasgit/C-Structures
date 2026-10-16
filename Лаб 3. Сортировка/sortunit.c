@@ -5,38 +5,14 @@
 #include <stdbool.h>   // !!!!!!!!!!!!!!!!
 #include <string.h>  // memcpy
 
-
-/*
-Функция сравнения
-Должна возвращать целое число меньше, больше нуля или равное ему, если первый аргумент, соответственно, меньше, больше второго или равен ему. Если два члена массива равны, то порядок их расположения в массиве не определен.  
-
-*(const int *)pa  // сначала преобразовали указатель из типа void в тип const int, затем разыменовали и записали значение в переменную int a
-
-// зачем const
-*/
-int cmp(const void *pa, const void *pb)
-{
-	int a = *(const int *)pa;  // Преобразование неопределенного указателя к указателю типа int*
-    int b = *(const int *)pb;  // поменять для простоты на int b = *(int*)pb
-
-	if (a > b) return 1;
-	else if (a < b) return -1;
-	return 0;
-
-	//return a-b;
-}
-
 /*
 Функция  memcpy()  копирует n байт из участка памяти src в участок памяти dest. Адреса участков памяти не должны
        перекрываться друг другом. Если это неизбежно, используйте memmove(3).
 
 ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ
        Функция memcpy() возвращает указатель на dest.
-
-
-!!!! иправить опечатку int --> void 
 */
-int swap(void *p1, void *p2, size_t size)
+void swap(void *p1, void *p2, size_t size)
 {
 	char *tmp = malloc(size);
 	memcpy(tmp, p1, size);
@@ -69,7 +45,7 @@ void sort_bubble(void *base, size_t nmemb, size_t size,
 			void *a = p0+j*size;  // адрес на первую ячейку
 			void *b = p0+(j+1)*size;  // адрес на следующую ячейку
 
-			if (cmp(a, b) > 0) {
+			if (compar(a, b) > 0) {
 				memcpy(tmp, a, size);
 				memcpy(a, b, size);
 				memcpy(b, tmp, size);
@@ -100,7 +76,7 @@ void sort_v(void *base, size_t nmemb, size_t size,
 	for (int i = 1; i < nmemb; i++) {
 		int k = i;  // зачем нужна отдельная переменная, нельзя использовать просто i?
 		//  !!! функция сравнения может возвращать разницу, у меня это не учтено: 5 - 2 = 3. у меня строго == 1, надо сделать: > 0
-		while (k > 0 && cmp(p0 + (k-1)*size, (p0 + k*size)) == 1 ) {  // (p0 + (k-1)*size) > (p0 + k*size)
+		while (k > 0 && compar(p0 + (k-1)*size, (p0 + k*size)) == 1 ) {  // (p0 + (k-1)*size) > (p0 + k*size)
 			swap(p0 + (k-1)*size, p0 + k*size, size);
 			k -= 1;
 		}
@@ -127,13 +103,13 @@ void sort_vbin(void *base, size_t nmemb, size_t size,
 			int mi = (l + r)/2;  // серединный индекс
 			char *pmi = (char*)base + mi*size;
 
-			if (cmp(pmi, pi) > 0) {  // если pmi > pi, то сдвигаем правую границу, идем налево 
+			if (compar(pmi, pi) > 0) {  // если pmi > pi, то сдвигаем правую границу, идем налево 
 				r = mi-1;  // сдвигаю правую границу. так как я сделал в cmp строго больше, то нет смысла в r присваивать середину, он точно не подходит, поэтому сдвигаю границу ещё на 1 влево.
 			}
 			else {
 				l = mi+1;
 			}
-			// if (cmp(pmi, pi) == -1) {
+			// if (compar(pmi, pi) == -1) {
 			// 	l = mi+1;
 			// }
 		}
@@ -164,8 +140,8 @@ void sort_q(void *base, size_t nmemb, size_t size,
 	memcpy(tc, pc, size);  // защита от перезаписи
 
 	while (pl <= pr) {
-		while (cmp(pl, tc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
-		while (cmp(pr, tc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
+		while (compar(pl, tc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
+		while (compar(pr, tc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
 		if (pl <= pr) {
 			swap(pl, pr, size);  // риск замены pc
 			pl += size;
@@ -176,8 +152,8 @@ void sort_q(void *base, size_t nmemb, size_t size,
 
 	int k1 = (pr - (char*)base)/size+1;
 	int k2 = nmemb - (pl - (char*)base)/size;  // разобрать, упростить потом
-	sort_q((char*)base, k1, size, cmp);  // левый
-	sort_q(pl, k2, size, cmp);  // правый
+	sort_q((char*)base, k1, size, compar);  // левый
+	sort_q(pl, k2, size, compar);  // правый
 
 }
 
@@ -198,8 +174,8 @@ void sort_q(void *base, size_t nmemb, size_t size,
 
 // 	/* первый вариант через индексы (не высчитываю pl, pr)
 // 	while (l <= r) {
-// 		while (cmp(pl, pc) < 0) {l++; pl = (char*)base + l*size;}  // увеличиваем левую границу на 1 ячейку
-// 		while (cmp(pr, pc) > 0) {r--;}  // увеличиваем правую границу на 1 ячейку
+// 		while (compar(pl, pc) < 0) {l++; pl = (char*)base + l*size;}  // увеличиваем левую границу на 1 ячейку
+// 		while (compar(pr, pc) > 0) {r--;}  // увеличиваем правую границу на 1 ячейку
 // 		if (l <= r) {
 // 			swap(pl, pr, size);
 // 			l++; r--;
@@ -209,8 +185,8 @@ void sort_q(void *base, size_t nmemb, size_t size,
 
 
 // 	while (pl <= pr) {
-// 		while (cmp(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
-// 		while (cmp(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
+// 		while (compar(pl, pc) < 0) {pl += size;}  // увеличиваем левую границу на 1 ячейку
+// 		while (compar(pr, pc) > 0) {pr -= size;}  // увеличиваем правую границу на 1 ячейку
 // 		if (pl <= pr) {
 // 			swap(pl, pr, size);
 // 			pl += size;
@@ -218,6 +194,6 @@ void sort_q(void *base, size_t nmemb, size_t size,
 // 		}
 // 	}
 
-// 	sort_q((char*)base,l+1,size,cmp);
-// 	sort_q((char*)base+r*size,nmemb-r,size,cmp);
+// 	sort_q((char*)base,l+1,size,compar);
+// 	sort_q((char*)base+r*size,nmemb-r,size,compar);
 // }
